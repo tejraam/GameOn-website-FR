@@ -532,3 +532,8 @@ footer {
 .has-error {
   display: none;
 }
+
+#modal-confirmation {
+  display: block;
+  background-color: yellow;
+}

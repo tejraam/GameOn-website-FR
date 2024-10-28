@@ -12,6 +12,8 @@ const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
 const closeModal = document.querySelector(".close"); //const pour fermer modal
+const divFormulaire = document.getElementById("formulaire-id");
+const formulaireValide = document.getElementById("formulaireValide-id");
 
 // launch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
@@ -19,6 +21,8 @@ modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 // launch modal form
 function launchModal() {
   modalbg.style.display = "block";
+  divFormulaire.style.display = "block";
+  formulaireValide.style.display = "none";
 }
 
 // Ferme le modale lorsqu'on clique sur la croix
@@ -40,14 +44,16 @@ const prenomInput = document.getElementById("first-id");
 const nomInput = document.getElementById("last-id");
 const emailInput = document.getElementById("email-id");
 const birthDateInput = document.getElementById("birthdate-id");
-const nombreConcoursInput = document.getElementById("nombreConcours");
-const conditionsCheckbox = document.getElementById("conditions");
+const nombreConcoursInput = document.getElementById("nombre-concours-id");
+const conditionsCheckbox = document.getElementById("conditions-id");
 
 form.addEventListener("submit", function (event) {
   event.preventDefault(); // Empêche l'envoi du formulaire par défaut
 
   if (validerFormulaire()) {
-    form.submit(); // Soumet le formulaire si la validation réussit
+    form.reset(); // clear formulaire
+    divFormulaire.style.display = "none";
+    formulaireValide.style.display = "block";
   }
 });
 
@@ -64,6 +70,10 @@ function validerFormulaire() {
   const spanMsgErrorEmail = document.getElementById("email-error-msg-id");
   const spanMsgErrorBirthdate = document.getElementById(
     "birthdate-error-msg-id"
+  );
+  const spanMsgErrorVille = document.getElementById("ville-error-msg-id");
+  const spanMsgErrorConditions = document.getElementById(
+    "conditions-error-msg-id"
   );
 
   if (prenomInput.value.length < 2) {
@@ -98,13 +108,17 @@ function validerFormulaire() {
     isFormValid = false;
   }
 
-  if (!document.querySelector('input[name="choix"]:checked')) {
-    //alert("Veuillez sélectionner un choix de concours.");
+  if (verifierVilles()) {
+    spanMsgErrorVille.style.display = "none";
+  } else {
+    spanMsgErrorVille.style.display = "block";
     isFormValid = false;
   }
 
-  if (!conditionsCheckbox.checked) {
-    //alert("Veuillez accepter les conditions générales.");
+  if (conditionsCheckbox.checked) {
+    spanMsgErrorConditions.style.display = "none";
+  } else {
+    spanMsgErrorConditions.style.display = "block";
     isFormValid = false;
   }
 
@@ -122,3 +136,25 @@ function validateDate(date) {
   const todayYear = new Date().getFullYear();
   return todayYear - currentYear < 13 ? false : true;
 }
+
+function verifierVilles() {
+  const checkboxes = document.querySelectorAll('input[type = "radio"]');
+  for (const checkbox of checkboxes) {
+    if (checkbox.checked) return true;
+  }
+  return false;
+}
+
+// Validation Formulaire :
+
+console.log(validerFormulaire);
+
+/*
+if (validerFormulaire()) {
+  console.log(validerFormulaire);
+  formulaireValide.style.display = "none";
+} else {
+  formulaireValide.style.display = "block";
+  isFormValid = false;
+}
+  */
